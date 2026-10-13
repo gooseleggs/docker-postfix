@@ -1,6 +1,6 @@
 # Postfix SMTP Relay
 
-FROM debian:buster
+FROM debian:bookworm
 
 EXPOSE 25 587
 
@@ -15,7 +15,7 @@ RUN set -x \
 # Install packages
 RUN set -x \
   && apt-get update \
-  && apt-get install -y --no-install-recommends postfix mailutils busybox-syslogd opendkim opendkim-tools libsasl2-modules curl ca-certificates procps \
+  && apt-get install -y --no-install-recommends man postfix mailutils busybox-syslogd opendkim opendkim-tools libsasl2-modules curl ca-certificates procps \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   ;
@@ -40,6 +40,7 @@ RUN set -x \
 RUN set -x \
   && postconf -e smtpd_banner="\$myhostname ESMTP" \
   && postconf -Me submission/inet="submission inet n - - - - smtpd" \
+  && postconf -e "disable_vrfy_command = yes" \
   && cp -a /var/spool/postfix /var/spool/postfix.cache \
   && rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem \
   && rm -f /etc/opendkim.conf \

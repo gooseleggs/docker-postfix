@@ -7,7 +7,6 @@ set -e
 unset LANG
 
 cd /etc/postfix
-
 # Copy default spool from cache
 if [ ! "$(ls -A /var/spool/postfix)" ]; then
    cp -a /var/spool/postfix.cache/* /var/spool/postfix/
@@ -17,7 +16,6 @@ else
   chgrp -R postdrop /var/spool/postfix/maildrop
   postfix set-permissions
 fi
-
 # Defaults
 : "${SIZELIMIT:=15728640}"  # 10Meg with headroom
 : "${RELAYHOST:=}" # empty
